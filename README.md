@@ -1,6 +1,6 @@
 # The Unofficial Guide
 
-<!-- Replace this line with your name and which corpus you picked. -->
+<!-- Duc Nguyen - Corpus: campus_life -->
 
 > **This file is your submission.** Fill it in as you go — most sections get
 > written during the milestone that produces them, not at the end.
@@ -27,10 +27,14 @@
 
      Milestone 5. -->
 
+This guide searches 88 student posts in the campus_life corpus about courses, dining, housing, and campus rules. It retrieves relevant posts and uses them to answer questions with source filenames. When the closest post is beyond the 0.6 cutoff, it refuses the question before calling the model
+
 ## Chunking Strategy
 
-**Chunk size:**
-**Overlap:**
+**Chunk size:** One complete post per chunk (178–549 characters in this corpus)
+**Overlap:** 0 characters
+
+The 88 documents produced 88 chunks. In the five posts I inspected, the title and details formed readable, complete thoughts. Keeping each post together preserves that context; `chunker.py::split_documents` skips empty posts
 
 <!-- What about YOUR documents made you pick these numbers? Short posts and
      long sectioned guides don't want the same chunking, and "800 seemed
@@ -53,29 +57,59 @@
 
      Milestone 3. -->
 
-**Chunk 1** — source: `` — produced by: ``
+
+**Chunk 1** — source: `admin_add_drop_deadline.txt#0` — produced by: `chunker.py::split_documents`
 
 ```
+On the add/drop deadline
+
+You can add a course through the end of the second week. Dropping is a longer window — through the end of week six — but a drop after week two shows as a W on your transcript. Nothing anywhere on the registrar's site says this plainly, and students find out from each other.
 ```
 
-**Chunk 2** — source: `` — produced by: ``
+**Chunk 2** — source: `course_biol_160.txt#0` — produced by: `chunker.py::split_documents`
 
 ```
+BIOL 160 Cell Biology
+
+I lived here my sophomore year. Format is lecture three times a week with a weekly lab. Assessment: four unit tests and a cumulative final. Not curved.
+
+Expect 9 to 11 hours a week, the heaviest first-year course by reputation.
+
+The one piece of advice: the unit tests come fast, roughly every three weeks; falling behind once is very hard to recover from.
 ```
 
-**Chunk 3** — source: `` — produced by: ``
+**Chunk 3** — source: `course_hist_118_workload.txt#0` — produced by: `chunker.py::split_documents`
 
 ```
+Workload for HIST 118 Modern World History
+
+People keep asking so: a lot of reading, about 120 pages a week, but no problem sets. That's real time, not optimistic time.
+
+It's front-loaded — the first month is heavier than the rest, partly because you're learning the format.
 ```
 
-**Chunk 4** — source: `` — produced by: ``
+**Chunk 4** — source: `dining_pellew_dining_hall_followup.txt#0` — produced by: `chunker.py::split_documents`
 
 ```
+Re: Pellew Dining Hall
+
+Adding to what people have said about Pellew Dining Hall. The wait figure of 12 to 18 minutes at peak matches what I've seen. If you're trying to eat between classes, go before 11:45 and it's a different building entirely.
+
+Also worth saying: the furthest hall from anywhere, next to the athletics centre. Nobody tells you this at orientation.
 ```
 
-**Chunk 5** — source: `` — produced by: ``
+**Chunk 5** — source: `housing_innisfree_hall.txt#0` — produced by: `chunker.py::split_documents`
 
 ```
+Innisfree Hall — what it's actually like
+
+Transferred in last year, so take this with a grain of salt. Built 1991, renovated 2022. Rooms are doubles arranged as pairs sharing one bathroom between two rooms.
+
+The good: the shared-bathroom-between-two-rooms arrangement is the best compromise on campus.
+
+The bad: no air conditioning, which matters for the first three weeks of September.
+
+Laundry costs $1.75 wash, $1.75 dry, app-based. On noise: moderate; the building is L-shaped and the short wing is much quieter.
 ```
 
 ## Sample Answer
@@ -83,14 +117,17 @@
 <!-- One complete question and answer, pasted as text, with the source line
      visible. Milestone 4. -->
 
-**Question:**
+**Question:** How long is the peak wait at Pellew Dining Hall?
 
 **Answer:**
 
 ```
+The peak wait time at Pellew Dining Hall is 12 to 18 minutes.
+
+Source: `dining_pellew_dining_hall.txt` (and also mentioned in `dining_pellew_dining_hall_followup.txt`).
 ```
 
-**My relevance cutoff:**
+**My relevance cutoff:** 0.6. Covered questions had best distances from 0.1782 to 0.3855; uncovered questions ranged from 0.8246 to 0.9340. The cutoff falls in the gap between those groups. The Mongolia question was refused without a model call
 
 <!-- The number you set in config.py, and how you got there.
 
@@ -102,18 +139,25 @@
      Milestone 4. -->
 
 | Question | In corpus? | Best distance |
-|---|---|---|
-|  |  |  |
+|---|---|---:|
+| Course drop W | Yes | 0.3145 |
+| BIOL 160 curve | Yes | 0.3083 |
+| HIST 118 reading | Yes | 0.3164 |
+| Pellew peak wait | Yes | 0.1782 |
+| Innisfree air conditioning | Yes | 0.3855 |
+| Capital of Mongolia | No | 0.8246 |
+| Diesel oil change | No | 0.9340 |
+| 1994 World Cup | No | 0.8859 |
+| Ibuprofen dosage | No | 0.8442 |
+| Rust for loop | No | 0.8960 |
 
 ## How I Used AI
 
-1. Used ChatGPT to troubleshoot a Windows installation error. Its first suggestion, Python 3.12, also failed. We checked the package files, switched to Python 3.11, and I confirmed the fix when `test.py` passed all 10 checks.
+1. Used Chatgpt to troubleshoot a Windows installation error. Its first suggestion, Python 3.12, also failed. We checked the package files, switched to Python 3.11, and I confirmed the fix when `test.py` passed all 10 checks.
 
-2. Used ChatGPT to draft questions and sharpen two criteria using five chunks I printed from `campus_life`. I entered the questions and cleaned up `criteria.md`. The chunks support the facts in the questions; I still need to test the generated answers.
+2. Used Chatgpt to draft questions and sharpen two criteria using five chunks I printed from `campus_life`. I entered the questions and cleaned up `criteria.md`. The chunks support the facts in the questions; I still need to test the generated answers.
 
-**1.**
-
-**2.**
+3. Chatgpt suggested keeping each short post as one chunk. I updated split_documents, corrected its old description, and verified that reindexing produced 88 chunks. I compared five covered and five unrelated questions and kept the 0.6 cutoff because it falls between their distance ranges.
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
