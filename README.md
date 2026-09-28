@@ -107,14 +107,9 @@
 
 ## How I Used AI
 
-<!-- Two specific moments. For each: what you asked for, what came back, and
-     what you changed about it.
+1. Used ChatGPT to troubleshoot a Windows installation error. Its first suggestion, Python 3.12, also failed. We checked the package files, switched to Python 3.11, and I confirmed the fix when `test.py` passed all 10 checks.
 
-     "I asked Claude to write the chunking function from my notes. It ignored
-     the overlap, so I added that myself" is the level of detail we're after.
-     "I used AI to help me code" is not.
-
-     Milestone 5. -->
+2. Used ChatGPT to draft questions and sharpen two criteria using five chunks I printed from `campus_life`. I entered the questions and cleaned up `criteria.md`. The chunks support the facts in the questions; I still need to test the generated answers.
 
 **1.**
 
