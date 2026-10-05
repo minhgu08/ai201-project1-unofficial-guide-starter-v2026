@@ -169,7 +169,7 @@ Source: `dining_pellew_dining_hall.txt` (and also mentioned in `dining_pellew_di
 # Unit 2
 
 ## How I Used AI in Unit 2
-Used Chatgpt to help interpret the run logs and draft the tables and explanations below. It pointed out that the Innisfree answer was factually correct but failed my exact-phrase criterion. Then compared the draft with the saved output before adding it to this README
+Used Chatgpt to help interpret the run logs and draft the tables and explanations below. It pointed out that the Innisfree answer was factually correct but failed my exact-phrase criterion. I then compared the draft with the saved output before adding it to this README
 
 ## Run Log — Before
 
@@ -305,39 +305,40 @@ In a future test, I would tighten criterion 5 to require correct facts for all f
 
 ### Run Log — After
 
-<!-- Same format, same five criteria, three runs each.
-     `python run_eval.py --label after` -->
+Evaluation report: `results/run_2026-10-05_0128_after.md`.
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 4/5 | 5/5 | 5/5 | 5/5 | MET |
+| 2. Every answer names a source | 5/5 | 5/5 | 5/5 | 5/5 | MET |
+| 3. Gate stops out-of-corpus questions | 4/5 | 5/5 | 5/5 | 5/5 | MET |
+| 4. Five sample chunks have complete sentences and intact endings | 5/5 | 5/5 | 5/5 | 5/5 | MET |
+| 5. Answers contain their expected phrase | 4/5 | 4/5 | 3/5 | 4/5 | MISSED |
+
+All five answer-bearing sources remained in the retrieved results, and all 15 answers named a source. The gate refused all five unrelated questions. Gate results were measured once; chunk quality uses the unchanged baseline sample inspection. These deterministic checks are repeated across the three columns.
+
+Criterion 5 missed its target in run 2. The course-drop answer used “after the second week” instead of “week two.” The Innisfree answers also failed the literal “no air conditioning” check in all three runs, although they conveyed the correct fact.
+
+**Generated answer — course-drop question, run 2**
+
+Produced by `generate.py::answer_from_chunks`, recorded by `run_eval.py::main` in `results/run_2026-10-05_0128_after.md`.
+
+```text
+**A course drop shows as a W on your transcript if it occurs after the second week (up through the end of week six).**
+
+Source: admin_add_drop_deadline.txt
+```
+
+The answer conveys the correct timing but does not contain the expected phrase `week two`.
 
 **Did it help?**
 
-<!-- Say plainly whether it did, and how you know. If it made things worse,
-     say that — a change that backfired, honestly reported, earns full credit
-     and is more interesting than one that worked. What matters is that you can
-     tell.
-
-     Milestone 4. -->
+Reducing TOP_K from 5 to 3 lowered input tokens from 9,162 to 6,273, about 31.5%, across 15 model calls. The retrieved evidence still supported all five answers, and source citations and gate results met their targets. However, criterion 5 changed from 4/5 in every baseline run to 4/5, 3/5, and 4/5 afterward. The change reduced context usage, but did not improve the exact-phrase score. These runs do not establish whether the wording difference came from the smaller context or normal model variation.
 
 ## What's Still Broken
 
-<!-- For each criterion still missed after your fix: what you'd do about it,
-     and why you stopped where you did.
-
-     "I ran out of time" is fine if it's true. Pretending nothing is left is
-     not.
-
-     Milestone 5. -->
+Criterion 5 missed its target in the second after run. The relevant facts were retrieved, but generation used equivalent wording that my literal phrase check rejected. This exposes a weakness in how I measured answer correctness. I kept the original criterion unchanged and stopped after this one measured change.
 
 ## What I'd Do Differently
 
-<!-- Knowing what you know now — which of your five criteria would you write
-     differently, and why?
-
-     Milestone 5. -->
+Before a future evaluation, I would define a fact checklist that accepts equivalent wording and requires all five answers to be correct in every run. I would also include harder questions that require evidence from multiple posts. The current results only cover five straightforward factual questions.
