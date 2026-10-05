@@ -1,0 +1,41 @@
+No scorer.py found — running unscored. Verdict column will be blank.
+You'll build scorer.py in class in unit 2.
+
+
+When does a course drop appear as a W?
+  run 1: —  (best distance 0.314)
+  run 2: —  (best distance 0.314)
+  run 3: —  (best distance 0.314)
+
+Are BIOL 160 tests curved?
+  run 1: —  (best distance 0.308)
+  run 2: —  (best distance 0.308)
+  run 3: —  (best distance 0.308)
+
+How much reading does HIST 118 assign each week?
+  run 1: —  (best distance 0.316)
+  run 2: —  (best distance 0.316)
+  run 3: —  (best distance 0.316)
+
+How long is the peak wait at Pellew Dining Hall?
+  run 1: —  (best distance 0.178)
+  run 2: —  (best distance 0.178)
+  run 3: —  (best distance 0.178)
+
+Does Innisfree Hall have air conditioning?
+  run 1: —  (best distance 0.386)
+  run 2: —  (best distance 0.386)
+  run 3: —  (best distance 0.386)
+
+Out-of-scope questions (the gate should refuse these):
+  refused  (best distance 0.825)  What is the capital of Mongolia?
+  refused  (best distance 0.934)  How do I change the oil in a diesel engine?
+  refused  (best distance 0.886)  Who won the 1994 World Cup?
+  refused  (best distance 0.844)  What is the recommended dosage of ibuprofen for a headache?
+  refused  (best distance 0.896)  How do I write a for loop in Rust?
+  -> gate refused 5 of 5
+
+Wrote results\run_2026-10-05_0128_after.md
+15 model calls this session, 6859 tokens (6273 in, 586 out)
+
+Commit this file. It's the evidence the run actually happened.
