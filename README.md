@@ -296,9 +296,9 @@ In a future test, I would tighten criterion 5 to require correct facts for all f
 
 ## The Improvement
 
-**What I changed:**
+**What I changed:** Reduce `TOP_K` from 5 to 3 in `config.py`.
 
-**Why I picked it:**
+**Why I picked it:** The baseline retrieved some posts about other courses for the BIOL 160 question. I want to test whether using fewer chunks reduces unnecessary context while preserving the answers. All baseline criteria passed, so this is an efficiency experiment rather than a fix for an incorrect answer
 
 <!-- Connect it to a specific diagnosis above in one sentence. If you can't,
      you picked a fix because it sounded impressive. -->
