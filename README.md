@@ -324,7 +324,7 @@ Criterion 5 missed its target in run 2. The course-drop answer used “after the
 Produced by `generate.py::answer_from_chunks`, recorded by `run_eval.py::main` in `results/run_2026-10-05_0128_after.md`.
 
 ```text
-**A course drop shows as a W on your transcript if it occurs after the second week (up through the end of week six).**
+A course drop shows as a W on your transcript if it occurs after the second week (up through the end of week six).
 
 Source: admin_add_drop_deadline.txt
 ```
