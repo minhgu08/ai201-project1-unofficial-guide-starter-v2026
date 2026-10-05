@@ -151,7 +151,7 @@ Source: `dining_pellew_dining_hall.txt` (and also mentioned in `dining_pellew_di
 | Ibuprofen dosage | No | 0.8442 |
 | Rust for loop | No | 0.8960 |
 
-## How I Used AI
+## How I Used AI 
 
 1. Used Chatgpt to troubleshoot a Windows installation error. Its first suggestion, Python 3.12, also failed. We checked the package files, switched to Python 3.11, and I confirmed the fix when `test.py` passed all 10 checks.
 
@@ -168,9 +168,8 @@ Source: `dining_pellew_dining_hall.txt` (and also mentioned in `dining_pellew_di
 
 # Unit 2
 
-<!-- These sections get ADDED to what's already above. Don't delete or rewrite
-     unit 1 — the point is that someone can see what you said before you knew
-     how it went. -->
+## How I Used AI in Unit 2
+Used Chatgpt to help interpret the run logs and draft the tables and explanations below. It pointed out that the Innisfree answer was factually correct but failed my exact-phrase criterion. Then compared the draft with the saved output before adding it to this README
 
 ## Run Log — Before
 
@@ -186,15 +185,67 @@ Source: `dining_pellew_dining_hall.txt` (and also mentioned in `dining_pellew_di
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 2. Every answer names a source | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 3. Gate stops out-of-corpus questions | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 4. Five sample chunks have complete sentences and intact endings | 5/5 |5/5 | 5/5| 5/5| MET |
+| 5. Answers contain their expects phrase | 4/5| 4/5| 4/5| 4/5 | MET |
 
-<!-- Underneath, paste the REAL output for each criterion from one of your
-     runs — the actual text your system produced, not a description of it.
-     Name the file and function that produced it. -->
+- Criterion 1: the five answer-bearing sample chunks appear among the retrieved sources for their questions in every run.
+- Criterion 2: all 15 generated answers name at least one source filename.
+- Criterion 3: the gate refused all five unrelated questions; the deterministic result applies to all three columns.
+- Criterion 4: all five sampled chunks have complete sentences and intact endings; this check is deterministic.
+- Criterion 5: four answers per run contain their expected phrase. Innisfree says “does not have air conditioning,” which fails the literal “no air conditioning” check.
+
+### Baseline evidence
+
+Evaluation report: `results/run_2026-10-05_0104_before.md`.
+Sample chunks: `results/chunks_before.txt`.
+
+**Generated answer — Innisfree question, run 1**
+
+Produced by `generate.py::answer_from_chunks`, recorded by `run_eval.py::main`.
+
+Question: Does Innisfree Hall have air conditioning?
+
+```text
+No, Innisfree Hall does not have air conditioning, which matters for the first three weeks of September.
+
+Source: housing_innisfree_hall.txt
+```
+
+This answer names a source and conveys the correct fact, but does not contain the exact expected phrase `no air conditioning`. The same wording mismatch occurred in all three runs.
+
+**Sample chunk — criterion 4**
+
+Source: `course_biol_160.txt#0`.
+Produced by `chunker.py::split_documents`.
+
+```text
+BIOL 160 Cell Biology
+
+I lived here my sophomore year. Format is lecture three times a week with a weekly lab. Assessment: four unit tests and a cumulative final. Not curved.
+
+Expect 9 to 11 hours a week, the heaviest first-year course by reputation.
+
+The one piece of advice: the unit tests come fast, roughly every three weeks; falling behind once is very hard to recover from.
+```
+
+This chunk contains complete sentences and ends with a complete sentence. I checked all five chunks in `results/chunks_before.txt`.
+
+**Out-of-scope gate results — criterion 3**
+
+Produced by `run_eval.py::check_out_of_scope`.
+
+```text
+Out-of-scope questions (the gate should refuse these):
+  refused  (best distance 0.825)  What is the capital of Mongolia?
+  refused  (best distance 0.934)  How do I change the oil in a diesel engine?
+  refused  (best distance 0.886)  Who won the 1994 World Cup?
+  refused  (best distance 0.844)  What is the recommended dosage of ibuprofen for a headache?
+  refused  (best distance 0.896)  How do I write a for loop in Rust?
+  -> gate refused 5 of 5
+```
 
 ## Verdicts
 
@@ -209,11 +260,11 @@ Source: `dining_pellew_dining_hall.txt` (and also mentioned in `dining_pellew_di
 
 | # | Criterion | Verdict | How I decided |
 |---|---|---|---|
-| 1 |  |  |  |
-| 2 |  |  |  |
-| 3 |  |  |  |
-| 4 |  |  |  |
-| 5 |  |  |  |
+| 1 | Retrieved chunks contain the answer | MET | Each question retrieved a source whose displayed chunk contains the answer, giving 5/5 in each run against the 4/5 target. |
+| 2 | Every answer names a source | MET | All five answers in each of the three runs name at least one source filename. |
+| 3 | Gate stops out-of-corpus questions | MET | The gate refused 5/5 unrelated questions, exceeding the 4/5 target. This deterministic measurement is repeated across the three columns. |
+| 4 | Sample chunks contain complete sentences and intact endings | MET | All five displayed chunks contain at least one complete sentence and have no sentence cut off at the end. This deterministic inspection is repeated across the three columns. |
+| 5 | Answers contain their expected phrase | MET | Four of five answers contain their expected phrase in every run, meeting the 4/5 target. The Innisfree answer fails the literal phrase check in all three runs. |
 
 ## Diagnoses
 
@@ -234,6 +285,14 @@ Source: `dining_pellew_dining_hall.txt` (and also mentioned in `dining_pellew_di
      low, and which one you'd tighten and to what.
 
      Milestone 3. -->
+
+All five criteria met their targets in the baseline test.
+
+One result stood out: the Innisfree answer failed the exact-phrase check in all three runs. The source says “no air conditioning,” while the answer says “does not have air conditioning.” Both express the same fact, so this is a limitation of my phrase check rather than a factual error.
+
+Criterion 5 still passed because its 4/5 target allows one question to fail. My five questions also ask for straightforward facts from short posts, so these results do not show how well the system handles harder questions.
+
+In a future test, I would tighten criterion 5 to require correct facts for all five questions in every run, with a checklist that accepts equivalent wording. For this evaluation, I am keeping the original criterion and target unchanged.
 
 ## The Improvement
 
